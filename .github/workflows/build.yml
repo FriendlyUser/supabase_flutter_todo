@@ -1,0 +1,23 @@
+# build flutter app and deploy to github pages
+name: Flutter Web Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - run: flutter pub get
+      - run: flutter build web --release --base-href "/supabase_flutter_todo/" --dart-define=SUPABASE_URL=https://khmkgewkmrnkujakymlp.supabase.co --dart-define=SUPABASE_ANNON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtobWtnZXdrbXJua3VqYWt5bWxwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Njg5NjM3MzksImV4cCI6MTk4NDUzOTczOX0.-w66-GHlL5FP8JiYKmvWZXE70mHr1Si5GidbU5CE3ro
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.0
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: build/web # The folder the action should deploy.
